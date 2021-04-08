@@ -31,13 +31,22 @@ class Transaction(models.Model):
     )
     name = models.CharField(max_length=150)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
-    budget_board = models.ForeignKey(BudgetBoard, on_delete=models.CASCADE, related_name="transactions")
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True,
-                                 related_name="transactions")
+    budget_board = models.ForeignKey(
+        BudgetBoard, on_delete=models.CASCADE, related_name="transactions"
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="transactions",
+    )
     status = models.CharField(max_length=10, choices=STATUS, default="profit")
-    date = models.DateField(default=timezone.now().date())
+    date = models.DateField()
 
     class Meta:
-        ordering = ['-date', ]
+        ordering = [
+            "-date",
+        ]
         verbose_name = "Транзакция"
         verbose_name_plural = "Транзакции"
