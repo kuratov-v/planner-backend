@@ -1,9 +1,9 @@
 version: '3.7'
 
-#networks:
-#  default:
-#    external:
-#      name: planner
+networks:
+  default:
+    external:
+      name: planner
 
 services:
   postgres:
