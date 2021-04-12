@@ -5,4 +5,12 @@ from .models import Habit
 class HabitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habit
-        fields = ["id", "title", "description", "is_track_value", "value", "user"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "is_complete",
+            "do_on_weekdays",
+            "user",
+            "date_created",
+        ]
