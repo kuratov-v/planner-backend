@@ -13,7 +13,7 @@ services:
       - ./.envs/.django
       - ./.envs/.postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - /var/lib/postgresql/data 
     restart: unless-stopped
     ports:
       - "5432:5432"
