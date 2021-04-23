@@ -22,12 +22,11 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "oauth2_provider",
+    "rest_framework.authtoken",
     "social_django",
-    "rest_framework_social_oauth2",
+    "rest_social_auth",
     "corsheaders",
     "django_filters",
 ]
@@ -74,8 +73,7 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
-        "rest_framework_social_oauth2.authentication.SocialAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
@@ -151,11 +149,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv("POSTGRES_DB")
-SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv("POSTGRES_DB")
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
+REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = os.getenv("SOCIAL_AUTH_VK_REDIRECT_URI")
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
-    "rest_framework_social_oauth2.backends.DjangoOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
