@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 
 import os
 
@@ -157,3 +158,8 @@ AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
