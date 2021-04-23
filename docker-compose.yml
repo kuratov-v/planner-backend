@@ -10,8 +10,10 @@ services:
     image: postgres
     container_name: planner-db
     env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
+      - ./.envs/.django
+      - ./.envs/.postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     restart: unless-stopped
     ports:
       - "5432:5432"
@@ -21,11 +23,9 @@ services:
       dockerfile: compose/local/django/Dockerfile
     container_name: planner-back
     env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
+      - ./.envs/.django
+      - ./.envs/.postgres
     command: bash -c "python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
-    volumes:
-      - .:/app
     ports:
       - "8000:8000"
     depends_on:
