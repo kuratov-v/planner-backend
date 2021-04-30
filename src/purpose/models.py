@@ -19,11 +19,15 @@ class Purpose(models.Model):
 
 
 class PurposeResult(models.Model):
-    purpose = models.ForeignKey(Purpose, on_delete=models.CASCADE)
+    purpose = models.ForeignKey(
+        Purpose, null=True, on_delete=models.SET_NULL, related_name="results"
+    )
     date = models.DateField()
     value = models.DecimalField(max_digits=20, decimal_places=2)
 
 
 class PurposeStatus(models.Model):
-    purpose = models.OneToOneField(Purpose, on_delete=models.CASCADE)
+    purpose = models.OneToOneField(
+        Purpose, on_delete=models.CASCADE, related_name="status"
+    )
     value = models.DecimalField(max_digits=20, decimal_places=2, null=True, default=0)

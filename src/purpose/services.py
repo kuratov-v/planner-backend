@@ -2,7 +2,7 @@ from django.db.models import Sum, Avg, Max, Min
 
 from .models import Purpose, PurposeResult, PurposeStatus
 
-        
+
 def update_purpose_status(purpose: Purpose) -> None:
     purpose_status, _ = PurposeStatus.objects.get_or_create(purpose=purpose)
     purpose_result = PurposeResult.objects.filter(purpose=purpose)

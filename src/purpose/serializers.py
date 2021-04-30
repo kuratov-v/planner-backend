@@ -3,9 +3,25 @@ from .models import Purpose, PurposeResult, PurposeStatus
 
 
 class PurposeSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+
     class Meta:
         model = Purpose
-        fields = "__all__"
+        fields = [
+            "id",
+            "name",
+            "description",
+            "end_value",
+            "end_date",
+            "mode",
+            "invert_value",
+            "is_complete",
+            "user",
+            "status",
+        ]
+
+    def get_status(self, obj):
+        return obj.status.value
 
 
 class PurposeResultSerializer(serializers.ModelSerializer):

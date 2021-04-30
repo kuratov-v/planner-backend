@@ -16,7 +16,7 @@ purpose.register(
 purpose.register(
     r"results",
     views.PurposeResultViewSet,
-    basename="categories",
+    basename="purpose-results",
     parents_query_lookups=[views.PurposeResultViewSet.purpose_lookup],
 )
 

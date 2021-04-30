@@ -17,7 +17,7 @@ class PurposeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Purpose.objects.filter(user=self.request.user)
+        return Purpose.objects.filter(user=self.request.user).select_related("status")
 
     def perform_create(self, serializer):
         serializer.validated_data["user"] = self.request.user
@@ -41,7 +41,6 @@ class PurposeResultViewSet(viewsets.ModelViewSet):
 
 
 class PurposeStatusViewSet(
-    mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     GenericViewSet,
 ):
@@ -53,3 +52,12 @@ class PurposeStatusViewSet(
 
     def get_queryset(self):
         return PurposeStatus.objects.filter(purpose_id=self.kwargs[self.parent_lookup])
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        if not queryset:
+            return None
+
+        serializer = self.get_serializer(queryset[0], many=False)
+        return Response(serializer.data)
