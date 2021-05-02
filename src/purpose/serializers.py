@@ -13,11 +13,14 @@ class PurposeSerializer(serializers.ModelSerializer):
             "description",
             "end_value",
             "end_date",
+            "date_created",
             "mode",
             "invert_value",
             "is_complete",
             "user",
             "status",
+            "group_result_by",
+            "group_result_mode",
         ]
 
     def get_status(self, obj):
