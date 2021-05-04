@@ -23,17 +23,20 @@ def get_purpose_results(purpose: Purpose) -> PurposeResult:
         "max": Max,
     }
     purpose_result = PurposeResult.objects.filter(purpose=purpose)
-    if not purpose.group_result_by:
-        return PurposeResult.objects.filter(purpose=purpose)
-    return (
-        purpose_result.values(f"date__{purpose.group_result_by}")
-        .annotate(value=param.get(purpose.group_result_mode)("value"))
-        .order_by()
-    )
+    if purpose.group_result_by:
+        date_val = f"date__{purpose.group_result_by}"
+        purpose_result = (
+            purpose_result.values(date_val)
+            .annotate(value=param.get(purpose.group_result_mode)("value"))
+            .order_by()
+        )
+    return [
+        {"date": res.get(date_val), "value": res.get("value")} for res in purpose_result
+    ]
 
 
 def update_purpose_status(purpose: Purpose) -> None:
     purpose_status, _ = PurposeStatus.objects.get_or_create(purpose=purpose)
-    result = get_purpose_results(purpose).values_list("value", flat=True)
+    result = [res.get("value") for res in get_purpose_results(purpose)]
     purpose_status.value = _get_status_value(purpose, result)
     purpose_status.save()
