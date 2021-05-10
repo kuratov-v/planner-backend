@@ -3,7 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.views import APIView
 
+from .services import get_purpose_results
 from .models import Purpose, PurposeResult, PurposeStatus
 from .serializers import (
     PurposeSerializer,
@@ -40,24 +42,10 @@ class PurposeResultViewSet(viewsets.ModelViewSet):
         return super(PurposeResultViewSet, self).perform_create(serializer)
 
 
-class PurposeStatusViewSet(
-    mixins.ListModelMixin,
-    GenericViewSet,
-):
-    purpose_lookup = "purpose_id"
-    purposes_lookup = f"{purpose_lookup}__in"
-    parent_lookup = f"parent_lookup_{purpose_lookup}"
+class PurposeStatusAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = PurposeStatusSerializer
 
-    def get_queryset(self):
-        return PurposeStatus.objects.filter(purpose_id=self.kwargs[self.parent_lookup])
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-
-        if not queryset:
-            return None
-
-        serializer = self.get_serializer(queryset[0], many=False)
-        return Response(serializer.data)
+    def get(self, request, id, format=None):
+        purpose = Purpose.objects.get(pk=id)
+        result = get_purpose_results(purpose)
+        return Response(result)
