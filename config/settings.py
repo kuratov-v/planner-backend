@@ -37,6 +37,7 @@ LOCAL_APPS = [
     "src.account",
     "src.habit_tracker",
     "src.purpose",
+    "src.todo",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
