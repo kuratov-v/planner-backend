@@ -43,12 +43,23 @@ class TaskReadSerializer(serializers.ModelSerializer):
 
 
 class CheckListSerializer(serializers.ModelSerializer):
+    items = serializers.SerializerMethodField()
+
     class Meta:
         model = CheckList
-        fields = "__all__"
+        fields = [
+            "id",
+            "title",
+            "task",
+            "items",
+        ]
+
+    def get_items(self, obj):
+        items = obj.item_set.all()
+        return ItemSerializer(items, many=True).data
 
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = "__all__"
+        fields = ["id", "title", "check_list", "is_complete"]
