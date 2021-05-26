@@ -50,4 +50,4 @@ check_list.register(
 )
 
 urlpatterns = extended_router.urls
-urlpatterns = router.urls
+urlpatterns += router.urls
