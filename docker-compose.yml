@@ -11,7 +11,7 @@ services:
     container_name: planner-db
     env_file:
       - ./.envs/.django
-      - ./.envs/.postgres
+      - ./.envs/.postgresql
     volumes:
       - /var/lib/postgresql/data 
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
     container_name: planner-back
     env_file:
       - ./.envs/.django
-      - ./.envs/.postgres
+      - ./.envs/.postgresql
     volumes:
       - ./:/app
     command: bash -c "python manage.py migrate && uvicorn config.asgi:application --host 0.0.0.0 --reload"

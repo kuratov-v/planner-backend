@@ -39,11 +39,11 @@ jobs:
           echo SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.VK_OAUTH2_KEY }} >> .django
           echo SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.VK_OAUTH2_SECRET }} >> .django
           echo SOCIAL_AUTH_VK_REDIRECT_URI=${{ secrets.VK_REDIRECT_URI }} >> .django
-          echo POSTGRES_USER=${{ secrets.DB_USER }} > .postgres
-          echo POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} >> .postgres
-          echo POSTGRES_HOST=${{ secrets.DB_HOST }} >> .postgres
-          echo POSTGRES_PORT=5432 >> .postgres
-          echo POSTGRES_DB=${{ secrets.DB_NAME }} >> .postgres
+          echo POSTGRES_USER=${{ secrets.DB_USER }} > .postgresql
+          echo POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} >> .postgresql
+          echo POSTGRES_HOST=${{ secrets.DB_HOST }} >> .postgresql
+          echo POSTGRES_PORT=5432 >> .postgresql
+          echo POSTGRES_DB=${{ secrets.DB_NAME }} >> .postgresql
 
     - name: Build and start project
       uses: appleboy/ssh-action@master
