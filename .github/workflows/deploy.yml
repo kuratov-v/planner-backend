@@ -1,0 +1,57 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Copy repository 
+      uses: appleboy/scp-action@master
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+      with:
+        source: "."
+        target: ${{ secrets.PROJECT_PATH }}
+
+    - name: Build project env
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+        script: |
+          mkdir ${{ secrets.PROJECT_PATH }}/.envs
+          cd ${{ secrets.PROJECT_PATH }}/.envs
+          echo DEBUG=0 > .django
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .django
+          echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .django
+          echo CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }} >> .django
+          echo SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.VK_OAUTH2_KEY }} >> .django
+          echo SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.VK_OAUTH2_SECRET }} >> .django
+          echo SOCIAL_AUTH_VK_REDIRECT_URI=${{ secrets.VK_REDIRECT_URI }} >> .django
+          echo POSTGRES_USER=${{ secrets.DB_USER }} > .postgres
+          echo POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} >> .postgres
+          echo POSTGRES_HOST=${{ secrets.DB_HOST }} >> .postgres
+          echo POSTGRES_PORT=5432 >> .postgres
+          echo POSTGRES_DB=${{ secrets.DB_NAME }} >> .postgres
+
+    - name: Build and start project
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+        script: |
+          cd ${{ secrets.PROJECT_PATH }}
+          docker-compose up --build -d
