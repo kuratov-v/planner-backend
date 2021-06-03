@@ -10,13 +10,8 @@ class BudgetBoard(models.Model):
 
 
 class BudgetBoardUser(models.Model):
-    RIGHTS = (
-        ("read", "Чтение"),
-        ("write", "изменение"),
-    )
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     budget_board = models.ForeignKey(BudgetBoard, on_delete=models.CASCADE)
-    rights = models.CharField(max_length=5, choices=RIGHTS, default="guest")
 
 
 class Category(models.Model):
@@ -25,10 +20,6 @@ class Category(models.Model):
 
 
 class Transaction(models.Model):
-    STATUS = (
-        ("expense", "Расход"),
-        ("profit", "Доход"),
-    )
     name = models.CharField(max_length=150)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     budget_board = models.ForeignKey(
@@ -41,12 +32,13 @@ class Transaction(models.Model):
         null=True,
         related_name="transactions",
     )
-    status = models.CharField(max_length=10, choices=STATUS, default="profit")
     date = models.DateField()
 
+    @property
+    def status(self):
+        return "expense" if self.amount < 0 else "profit"
+
     class Meta:
-        ordering = [
-            "-date",
-        ]
+        ordering = ["-date"]
         verbose_name = "Транзакция"
         verbose_name_plural = "Транзакции"
