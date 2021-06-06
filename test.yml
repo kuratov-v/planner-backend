@@ -12,6 +12,8 @@ services:
     env_file:
       - ./.envs_test/.postgres
       - ./.envs_test/.django
+    volumes:
+      - ./:/app
     command: bash -c "python manage.py migrate && pytest"
     depends_on:
       - postgres-test
