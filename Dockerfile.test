@@ -4,13 +4,11 @@ RUN apt-get update
 RUN apt-get install -y netcat
 RUN mkdir /app
 
-ADD requirements/base.txt /app/
-RUN pip install -r app/base.txt
+ADD requirements/ /app/requirements/
+RUN pip install -r app/requirements/test.txt
 
 COPY . /app
 WORKDIR /app
-
-EXPOSE 8000
 
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh

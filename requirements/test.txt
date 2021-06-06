@@ -1,0 +1,5 @@
+-r base.txt
+pytest==6.2.4
+pytest-django==4.3.0
+pytest-cov==2.12.1
+mixer==7.1.2

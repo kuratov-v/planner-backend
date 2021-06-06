@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  postgres-test:
+    image: postgres
+    env_file:
+      - ./.envs_test/.postgres
+  django-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test 
+    env_file:
+      - ./.envs_test/.postgres
+      - ./.envs_test/.django
+    command: bash -c "python manage.py migrate && pytest"
+    depends_on:
+      - postgres-test

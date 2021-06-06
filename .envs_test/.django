@@ -1,0 +1,2 @@
+SECRET_KEY=*kazg-jsdfsdf^*830nlsaDFas4df7a3ras0faH23o
+CORS_ALLOWED_ORIGINS=http://localhost:8000,http://localhost:8080,http://localhost
