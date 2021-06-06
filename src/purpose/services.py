@@ -1,6 +1,7 @@
 from django.db.models import Sum, Avg, Max, Min
 from typing import List
-from datetime import datetime, timedelta, date
+from datetime import date
+from src.utils import get_week_range
 import calendar
 
 from .models import Purpose, PurposeResult, PurposeStatus
@@ -24,12 +25,6 @@ def _get_purpose_filter(group_by: str) -> List[str]:
     return [f"date__{r}" for r in ranges]
 
 
-def get_week_range(year, week):
-    first_day = datetime.strptime(f"{year}-W{week}-1", "%Y-W%W-%w").date()
-    last_day = first_day + timedelta(days=6)
-    return first_day, last_day
-
-
 def _get_date(purpose: Purpose) -> str:
     year = int(purpose.get("date__year"))
     month = int(purpose.get("date__month"))
@@ -48,6 +43,7 @@ def _get_date(purpose: Purpose) -> str:
 
 
 def get_purpose_results(purpose: Purpose) -> PurposeResult:
+    """ Returns purpose results grouped by field group_result_by """
     param = {
         "sum": Sum,
         "avg": Avg,
