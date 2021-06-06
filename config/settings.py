@@ -12,8 +12,6 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", 0) in ["True", "true", "1"]
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
-
 # INSTALLED_APPS
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -34,7 +32,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "src.budget",
-    "src.account",
     "src.habit_tracker",
     "src.purpose",
     "src.todo",
@@ -53,8 +50,6 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(",")
-
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
@@ -72,13 +67,6 @@ TEMPLATES = [
         },
     },
 ]
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-}
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -151,16 +139,41 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
-SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
-REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = os.getenv("SOCIAL_AUTH_VK_REDIRECT_URI")
+# REST Framework
+# https://www.django-rest-framework.org/
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+}
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
 
+# Social auth
+# https://python-social-auth.readthedocs.io/en/latest/
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
+REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = os.getenv("SOCIAL_AUTH_VK_REDIRECT_URI")
+
+# Simple jwt
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# CORS headers
+# https://pypi.org/project/django-cors-headers/
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(",")

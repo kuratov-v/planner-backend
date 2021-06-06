@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
@@ -17,7 +16,6 @@ class BudgetBoardViewSet(viewsets.ModelViewSet):
     budget_board_lookup = "budget_board_id"
     budget_boards_lookup = f"{budget_board_lookup}__in"
     parent_org_lookup = f"parent_lookup_{budget_board_lookup}"
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return BudgetBoard.objects.filter(user=self.request.user)
@@ -31,7 +29,6 @@ class TransactionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     budget_board_lookup = "budget_board_id"
     budget_boards_lookup = f"{budget_board_lookup}__in"
     parent_org_lookup = f"parent_lookup_{budget_board_lookup}"
-    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action in ("list", "retrieve"):
@@ -66,7 +63,6 @@ class CategoryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     budget_board_lookup = "budget_board_id"
     budget_boards_lookup = f"{budget_board_lookup}__in"
     parent_org_lookup = f"parent_lookup_{budget_board_lookup}"
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Category.objects.filter(

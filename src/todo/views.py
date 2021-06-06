@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
@@ -22,7 +21,6 @@ from .serializers import (
 
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Project.objects.filter(user=self.request.user)
@@ -34,7 +32,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class SectionViewSet(viewsets.ModelViewSet):
     serializer_class = SectionSerializer
-    permission_classes = [IsAuthenticated]
     queryset = Section.objects.all()
 
 
@@ -47,8 +44,6 @@ class SectionViewSetNested(NestedViewSetMixin, SectionViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-
     def get_queryset(self):
         return Task.objects.filter(section__project__user=self.request.user)
 
@@ -68,7 +63,6 @@ class TaskViewSetNested(NestedViewSetMixin, TaskViewSet):
 
 class CheckListViewSet(viewsets.ModelViewSet):
     serializer_class = CheckListSerializer
-    permission_classes = [IsAuthenticated]
     queryset = CheckList.objects.all()
 
 
@@ -83,7 +77,6 @@ class CheckListViewSetNested(NestedViewSetMixin, CheckListViewSet):
 
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
-    permission_classes = [IsAuthenticated]
     queryset = Item.objects.all()
 
 
